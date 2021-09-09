@@ -15,43 +15,38 @@ namespace PathfindingLibrary
 
         public Queue<T> GetPath(T from,T to)
         {
-            List<PFNode> openList = BakeMesh();
+            PFNode initialNode = CreateNode(from);
+            List<PFNode> closedList = new List<PFNode>() { initialNode };
+            List<PFNode> openList = new List<PFNode>(ComputeIncidentNodes(initialNode,from));
             return null;
         }
 
-        private List<PFNode> BakeMesh()
+        private PFNode[] ComputeIncidentNodes(PFNode sourceNode, T sourceObject)
         {
-            List<PFNode> pFNodes = new List<PFNode>();
-            T[] objects = rawMesh.allObjects;
-            
-            for(int i = 0;i < objects.Length; i++)
+            T[] incidentObjects = rawMesh.GetIncidentObjects(sourceObject);
+            List<PFNode> incidents = new List<PFNode>();
+            for(int i = 0;i < incidentObjects.Length; i++)
             {
-                PFNode newNode = rawMesh.NodeFromObject(objects[i]);
-                objToNodeMap.Add(objects[i], newNode);
-                pFNodes.Add(newNode);
+                PFNode newNode = CreateNode(incidentObjects[i],sourceNode);
+                incidents.Add(newNode);
             }
+            return incidents.ToArray();
+        }
 
-            for(int i = 0;i < objects.Length; i++)
+        private PFNode CreateNode(T source)
+        {
+            PFNode newNode;
+            if (!objToNodeMap.TryGetValue(source,out newNode))
             {
-                PFNode currentNode;
-                T currentObject = objects[i];
-                objToNodeMap.TryGetValue(currentObject, out currentNode);
-                T[] incidentObjects = rawMesh.GetIncidentObjects(currentObject);
-                for(int j = 0;j < incidentObjects.Length; j++)
-                {
-                    PFNode currentIncidentNode;
-                    if(objToNodeMap.TryGetValue(incidentObjects[j],out currentIncidentNode))
-                    {
-                        currentNode.AddIncidentNode(currentIncidentNode);
-                    }
-                    else
-                    {
-                        throw new Exception("Object from GetIncidentObjects not contain in allObjects");
-                    }
-                }
+                newNode = rawMesh.NodeFromObject(source);
+                objToNodeMap.Add(source, newNode);
             }
+            return newNode;
+        }
 
-            return pFNodes;
+        private PFNode CreateNode(T source,PFNode parent)
+        {
+            return CreateNode(source).parent = parent;
         }
     }
 }

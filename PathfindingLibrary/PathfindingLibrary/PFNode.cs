@@ -29,7 +29,8 @@ namespace PathfindingLibrary
         private readonly Coordinates coords;
         private readonly int g;
         private int h;
-        private List<PFNode> incidentNodes;
+        //private List<PFNode> incidentNodes;
+        public PFNode parent;
 
         public PFNode(int cost,Coordinates coords)
         {
@@ -37,6 +38,6 @@ namespace PathfindingLibrary
             g = cost;
         }
 
-        public void AddIncidentNode(PFNode node) { incidentNodes.Add(node); }
+        //public void AddIncidentNode(PFNode node) { incidentNodes.Add(node); }
     }
 }
