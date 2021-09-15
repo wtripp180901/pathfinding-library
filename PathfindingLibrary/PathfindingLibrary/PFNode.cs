@@ -26,18 +26,31 @@ namespace PathfindingLibrary
 
     public class PFNode
     {
-        private readonly Coordinates coords;
-        private readonly int g;
-        private int h;
-        //private List<PFNode> incidentNodes;
-        public PFNode parent;
-
-        public PFNode(int cost,Coordinates coords)
+        private readonly Coordinates _coords;
+        public Coordinates coords
         {
-            this.coords = coords;
+            get { return coords; }
+        }
+        private readonly float g;
+        private float h = 0;
+        public float f { get { return h + g; } }
+        //private List<PFNode> incidentNodes;
+        public PFNode parent = null;
+        public object source;
+
+        public PFNode(float cost,Coordinates coords,object sourceObject)
+        {
+            _coords = coords;
             g = cost;
+            source = sourceObject;
         }
 
-        //public void AddIncidentNode(PFNode node) { incidentNodes.Add(node); }
+        public void SetH(Coordinates targetCoords)
+        {
+            float dx = targetCoords.x - _coords.x;
+            float dy = targetCoords.y - _coords.y;
+            float dz = targetCoords.z - _coords.z;
+            h = (dx * dx) + (dy * dy) + (dz * dz);
+        }
     }
 }

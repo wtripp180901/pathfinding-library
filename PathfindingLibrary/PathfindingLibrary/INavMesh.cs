@@ -7,7 +7,7 @@ namespace PathfindingLibrary
     public interface INavMesh<T>
     {
         T[] GetIncidentObjects(T incidentTo);
-        T[] allObjects { get; }
+        //T[] allObjects { get; }
         PFNode NodeFromObject(T source);
     }
 }
